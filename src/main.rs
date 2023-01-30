@@ -1,5 +1,6 @@
 // Uncomment this block to pass the first stage
 use std::net::TcpListener;
+use http::{Request, Response, StatusCode};
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -19,4 +20,16 @@ fn main() {
             }
         }
      }
+}
+
+fn respond_to(req: Request<()>) -> http::Result<Response<()>> {
+    let mut builder = Response::builder()
+        .header("Foo", "Bar")
+        .status(StatusCode::OK);
+
+   if req.headers().contains_key("Another-Header") {
+       builder = builder.header("Another-Header", "Ack");
+   }
+
+   builder.body(())
 }
